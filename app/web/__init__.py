@@ -1,0 +1,3 @@
+"""
+Web Setup Dashboard module.
+"""
