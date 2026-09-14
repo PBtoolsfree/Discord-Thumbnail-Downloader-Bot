@@ -9,7 +9,7 @@ from app.security.ssrf import is_safe_url
 class YouTubeExtractor(BaseExtractor):
     # Regex to match youtube.com and youtu.be URLs
     # Also handles shorts and standard watch endpoints
-    YT_REGEX = re.compile(r'(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})')
+    YT_REGEX = re.compile(r'(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})')
     
     def can_handle(self, url: str) -> bool:
         return bool(self.YT_REGEX.search(url))
