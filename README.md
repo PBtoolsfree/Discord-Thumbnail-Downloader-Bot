@@ -29,8 +29,8 @@ A production-ready Discord bot for automatically downloading and sending thumbna
 ## One-Click Installation (Linux / Oracle Cloud)
 1. Clone the repository:
    ```bash
-   git clone https://github.com/USERNAME/discord-thumbnail-bot.git
-   cd discord-thumbnail-bot
+   git clone https://github.com/PBtoolsfree/Discord-Thumbnail-Downloader-Bot.git
+   cd Discord-Thumbnail-Downloader-Bot
    ```
 2. Run the installer:
    ```bash
