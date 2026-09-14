@@ -23,7 +23,9 @@ if [ ! -f .env ]; then
     # Generate random setup password
     RANDOM_PASS=$(openssl rand -hex 8)
     sed -i "s/change_this_default_password/$RANDOM_PASS/" .env
-    
+    # Ensure permissions for Docker non-root user
+    chmod 666 .env
+    chmod -R 777 data tmp 2>/dev/null || true
     echo "Generated Setup Password: $RANDOM_PASS"
     echo "Keep this safe! You'll need it to log into the web setup."
 else
