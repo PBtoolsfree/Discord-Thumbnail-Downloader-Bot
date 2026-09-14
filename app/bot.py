@@ -30,8 +30,8 @@ class PBThumbnailBot(commands.Bot):
         # Sync slash commands if needed
         # In a real app we might sync to a specific guild for faster updates
         try:
-            if settings.discord_guild_id:
-                guild = discord.Object(id=settings.discord_guild_id)
+            if settings.discord_guild_id and settings.discord_guild_id.isdigit():
+                guild = discord.Object(id=int(settings.discord_guild_id))
                 self.tree.copy_global_to(guild=guild)
                 await self.tree.sync(guild=guild)
             else:

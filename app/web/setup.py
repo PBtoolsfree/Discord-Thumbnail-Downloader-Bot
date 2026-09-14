@@ -82,10 +82,8 @@ SETUP_PORT={settings.setup_port}
     # Reload settings in current process for UI feedback
     settings.discord_token = discord_token
     settings.discord_client_id = discord_client_id
-    if discord_guild_id:
-        settings.discord_guild_id = int(discord_guild_id)
-    if thumbnail_channel_id:
-        settings.thumbnail_channel_id = int(thumbnail_channel_id)
+    settings.discord_guild_id = discord_guild_id
+    settings.thumbnail_channel_id = thumbnail_channel_id
     settings.max_urls_per_message = max_urls_per_message
     settings.max_image_size_mb = max_image_size_mb
     settings.cache_ttl_hours = cache_ttl_hours

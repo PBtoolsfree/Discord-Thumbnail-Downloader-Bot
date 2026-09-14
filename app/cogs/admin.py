@@ -77,11 +77,15 @@ class AdminCog(commands.Cog):
             await interaction.response.send_message("❌ Thumbnail channel is not configured in settings.", ephemeral=True)
             return
             
-        channel = self.bot.get_channel(settings.thumbnail_channel_id)
-        if channel:
-            await interaction.response.send_message(f"✅ Found configured channel: <#{settings.thumbnail_channel_id}>", ephemeral=True)
-        else:
-            await interaction.response.send_message(f"❌ Could not find channel with ID {settings.thumbnail_channel_id}. Is the bot invited to the server and does it have view permissions?", ephemeral=True)
+        try:
+            channel_id = int(settings.thumbnail_channel_id)
+            channel = self.bot.get_channel(channel_id)
+            if channel:
+                await interaction.response.send_message(f"✅ Found configured channel: <#{channel_id}>", ephemeral=True)
+            else:
+                await interaction.response.send_message(f"❌ Could not find channel with ID {channel_id}. Is the bot invited to the server and does it have view permissions?", ephemeral=True)
+        except ValueError:
+            await interaction.response.send_message("❌ Thumbnail channel ID is invalid.", ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(AdminCog(bot))

@@ -25,7 +25,7 @@ class ListenerCog(commands.Cog):
             return
 
         # Ensure channel is configured and matches
-        if not settings.thumbnail_channel_id or message.channel.id != settings.thumbnail_channel_id:
+        if not settings.thumbnail_channel_id or str(message.channel.id) != str(settings.thumbnail_channel_id):
             return
 
         # Find URLs

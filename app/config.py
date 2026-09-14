@@ -6,8 +6,8 @@ class Settings(BaseSettings):
     # Discord Configuration
     discord_token: str = ""
     discord_client_id: str = ""
-    discord_guild_id: Optional[int] = None
-    thumbnail_channel_id: Optional[int] = None
+    discord_guild_id: str = ""
+    thumbnail_channel_id: str = ""
 
     # Limits & Features
     max_urls_per_message: int = 5
