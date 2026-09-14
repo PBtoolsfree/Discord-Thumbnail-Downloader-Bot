@@ -27,6 +27,14 @@ A production-ready Discord bot for automatically downloading and sending thumbna
 9. Go back to the **Bot** tab and copy your **Token**. Keep it safe!
 
 ## One-Click Installation (Linux / Oracle Cloud)
+
+### Prerequisites (For fresh Ubuntu/Debian servers)
+If you are running this on a brand new VPS, install Git and Docker first:
+```bash
+sudo apt update && sudo apt install git -y
+curl -fsSL https://get.docker.com | sudo sh
+```
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/PBtoolsfree/Discord-Thumbnail-Downloader-Bot.git
