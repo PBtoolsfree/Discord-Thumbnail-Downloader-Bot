@@ -10,6 +10,7 @@ A production-ready Discord bot for automatically downloading and sending thumbna
 - **Dockerized**: Easy to deploy on Oracle Cloud Free Tier or any VPS.
 - **Resource Efficient**: Asynchronous, lightweight, with caching to prevent duplicate downloads.
 - **Rate Limits**: Configurable concurrency and file size limits.
+- **Premium Tiers & Monetization**: Built-in daily usage limits (Free, Medium, Unlimited) allowing you to monetize access.
 
 ## Requirements
 - Docker and Docker Compose
@@ -56,11 +57,18 @@ curl -fsSL https://get.docker.com | sudo sh
 ## Web Dashboard Note
 Once configured, it's highly recommended to disable the setup dashboard by setting `SETUP_ENABLED=false` in `.env` and restarting.
 
-## Bot Commands (Admins Only)
+## Bot Commands
+
+### Admin Commands (Requires Administrator Permission)
 - `/status` - Check bot status
-- `/config` - View current limits
+- `/config` - View current global configuration limits
+- `/tier_set @User [tier]` - Upgrade a user to a premium tier (`free`, `medium`, `unlimited`)
+- `/tier_view @User` - Check a user's current tier and daily usage
 - `/test` - Test if the channel is properly configured
 - `/help` - View help
+
+### User Commands (Available to everyone)
+- `/limits` - View your active plan, today's usage, and remaining downloads
 
 ## Updating
 Run the update script safely:
