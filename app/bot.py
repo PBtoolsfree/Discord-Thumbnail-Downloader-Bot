@@ -36,6 +36,10 @@ class PBThumbnailBot(commands.Bot):
                 guild = discord.Object(id=int(settings.discord_guild_id))
                 self.tree.copy_global_to(guild=guild)
                 await self.tree.sync(guild=guild)
+                
+                # Clear global commands to prevent duplicates
+                self.tree.clear_commands(guild=None)
+                await self.tree.sync()
             else:
                 await self.tree.sync()
             logger.info("Slash commands synced.")
