@@ -1,5 +1,7 @@
 import discord
 from discord import app_commands
+from discord.app_commands import Choice
+from app.cache.user_db import user_db
 from discord.ext import commands
 from app.config import settings
 from app.logging_config import logger
@@ -86,6 +88,52 @@ class AdminCog(commands.Cog):
                 await interaction.response.send_message(f"❌ Could not find channel with ID {channel_id}. Is the bot invited to the server and does it have view permissions?", ephemeral=True)
         except ValueError:
             await interaction.response.send_message("❌ Thumbnail channel ID is invalid.", ephemeral=True)
+
+    @app_commands.command(name="tier_set", description="Admin: Set a user's premium tier")
+    @app_commands.default_permissions(administrator=True)
+    @app_commands.choices(tier=[
+        Choice(name="Free (5/day)", value="free"),
+        Choice(name="Medium (50/day)", value="medium"),
+        Choice(name="Unlimited", value="unlimited"),
+    ])
+    async def tier_set(self, interaction: discord.Interaction, member: discord.Member, tier: Choice[str]):
+        if not self.is_admin(interaction):
+            await interaction.response.send_message("❌ You need administrator permissions.", ephemeral=True)
+            return
+            
+        success = await user_db.set_user_tier(str(member.id), tier.value)
+        if success:
+            await interaction.response.send_message(f"✅ Successfully set **{member.display_name}** to **{tier.value.upper()}** tier.", ephemeral=True)
+        else:
+            await interaction.response.send_message("❌ Failed to set tier.", ephemeral=True)
+
+    @app_commands.command(name="tier_view", description="Admin: View a user's tier and usage")
+    @app_commands.default_permissions(administrator=True)
+    async def tier_view(self, interaction: discord.Interaction, member: discord.Member):
+        if not self.is_admin(interaction):
+            await interaction.response.send_message("❌ You need administrator permissions.", ephemeral=True)
+            return
+            
+        tier = await user_db.get_user_tier(str(member.id))
+        usage = await user_db.get_today_usage(str(member.id))
+        limit = user_db.limits.get(tier, 5)
+        
+        limit_display = "∞" if tier == "unlimited" else limit
+        await interaction.response.send_message(f"👤 **{member.display_name}**\n**Tier:** {tier.upper()}\n**Today's Usage:** {usage} / {limit_display}", ephemeral=True)
+
+    @app_commands.command(name="limits", description="View your remaining daily thumbnail downloads")
+    async def limits(self, interaction: discord.Interaction):
+        tier = await user_db.get_user_tier(str(interaction.user.id))
+        usage = await user_db.get_today_usage(str(interaction.user.id))
+        limit = user_db.limits.get(tier, 5)
+        
+        if tier == "unlimited":
+            msg = "🌟 **Your Plan:** UNLIMITED\nYou have no download limits! Enjoy!"
+        else:
+            remaining = max(0, limit - usage)
+            msg = f"📊 **Your Plan:** {tier.upper()}\n**Today's Usage:** {usage} / {limit}\n**Remaining:** {remaining}"
+            
+        await interaction.response.send_message(msg, ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(AdminCog(bot))

@@ -9,6 +9,7 @@ from app.extractors import get_all_extractors
 from app.extractors.base import ExtractionError
 from app.downloader.image_downloader import downloader, DownloadError
 from app.cache.cache import cache
+from app.cache.user_db import user_db
 
 URL_REGEX = re.compile(r'(https?://\S+)')
 
@@ -37,6 +38,21 @@ class ListenerCog(commands.Cog):
         if len(urls) > settings.max_urls_per_message:
             await message.reply(f"⚠️ Too many URLs! Processing first {settings.max_urls_per_message}.")
             urls = urls[:settings.max_urls_per_message]
+
+        # Check user tiers and limits
+        user_id = str(message.author.id)
+        requested_amount = len(urls)
+        
+        allowed, remaining, tier = await user_db.can_process(user_id, requested_amount)
+        if not allowed:
+            if remaining == 0:
+                await message.reply(f"❌ You have reached your daily limit of thumbnails for the **{tier.upper()}** plan. Please upgrade to continue!")
+            else:
+                await message.reply(f"❌ You only have **{remaining}** thumbnails left today on the **{tier.upper()}** plan, but you asked for {requested_amount}. Please upgrade or send fewer links!")
+            return
+            
+        # Increment usage
+        await user_db.increment_usage(user_id, requested_amount)
 
         for url in urls:
             # We process them in asyncio tasks but rate limit via semaphore

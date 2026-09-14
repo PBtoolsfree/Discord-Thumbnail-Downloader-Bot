@@ -7,6 +7,7 @@ import asyncio
 from app.config import settings
 from app.logging_config import logger
 from app.cache.cache import cache
+from app.cache.user_db import user_db
 
 class PBThumbnailBot(commands.Bot):
     def __init__(self):
@@ -22,6 +23,7 @@ class PBThumbnailBot(commands.Bot):
     async def setup_hook(self):
         """Called once when the bot starts."""
         await cache.init_db()
+        await user_db.init_db()
         
         # Load cogs
         await self.load_extension("app.cogs.admin")
