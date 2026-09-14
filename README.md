@@ -37,7 +37,7 @@ A production-ready Discord bot for automatically downloading and sending thumbna
    bash install.sh
    ```
 3. Look at the output. It will give you a temporary password for the setup dashboard.
-4. Go to `http://YOUR_SERVER_IP:8080` in your browser.
+4. Go to the Setup Dashboard URL shown in your terminal output (e.g., `http://YOUR_SERVER_IP:8080`) in your web browser.
 5. Login with username `admin` and the generated password.
 6. Enter your Discord Bot Token and settings, and click Save.
 7. Restart the bot container to apply:
